@@ -111,19 +111,3 @@
   when:
     - "item['path'] | basename != _alertmanager_archive_filename"
     - "alertmanager_clean_src_dir"
-
-- name: "Add systemd service"
-  ansible.builtin.template:
-    src: systemd.service
-    dest: /etc/systemd/system/alertmanager.service
-    owner: root
-    group: root
-    mode: u=rw,g=r,o=r
-  notify: "restart alertmanager"
-
-- name: "Start and enable systemd service"
-  ansible.builtin.systemd:
-    name: "alertmanager.service"
-    daemon_reload: true
-    enabled: true
-    state: started
