@@ -1,0 +1,8 @@
+---
+# {{ ansible_managed }}
+
+{% if alertmanager_amtool_config is string %}
+{{ alertmanager_amtool_config | trim }}
+{% elif alertmanager_amtool_config is mapping %}
+{{ alertmanager_amtool_config | to_nice_yaml(indent=2, sort_keys=false) | trim }}
+{% endif %}

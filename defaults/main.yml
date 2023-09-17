@@ -1,0 +1,52 @@
+---
+alertmanager_arch_map:
+  x86_64: amd64
+  i386: 386
+  aarch64: arm64
+  armv7l: armv7
+  armv6l: armv6
+
+alertmanager_github_org: prometheus
+alertmanager_github_repo: alertmanager
+alertmanager_github_checksum_filename: sha256sums.txt
+alertmanager_checksum_type: sha256
+
+alertmanager_version: latest
+
+alertmanager_install: true
+alertmanager_bin_dir: /opt/prometheus/alertmanager
+alertmanager_src_dir: /opt/prometheus/alertmanager/src
+alertmanager_strip_components: 1
+alertmanager_src_files:
+  - alertmanager
+  - amtool
+alertmanager_clean_src_dir: true
+
+alertmanager_manage_user: true
+alertmanager_user: alertmanager
+alertmanager_group: alertmanager
+
+alertmanager_port: 9093
+alertmanager_listen: localhost:{{ alertmanager_port }}
+alertmanager_external_url: ""
+
+alertmanager_flags: "{{ lookup('template', 'flags') }}"
+alertmanager_extra_flags: {}
+alertmanager_log_level: warn
+alertmanager_log_format: logfmt
+
+alertmanager_config_dir: /etc/prometheus/alertmanager
+alertmanager_config_file: alertmanager.yml
+alertmanager_config: ""
+
+alertmanager_db_dir: /var/lib/alertmanager
+
+alertmanager_storage_retention: ""
+
+alertmanager_template_dir: "{{ alertmanager_config_dir }}/templates"
+alertmanager_template_files: []
+
+alertmanager_amtool_config_dir: /etc/amtool/
+alertmanager_amtool_config_file: config.yml
+alertmanager_amtool_config:
+  alertmanager.url: "http://localhost:9093"

@@ -1,0 +1,187 @@
+---
+argument_specs:
+  main:
+    short_description: Install and configure alertmanager for prometheus
+    options:
+      alertmanager_listen:
+        description: Listen address and port
+        type: str
+        default: localhost:9093
+
+      alertmanager_external_url:
+        description: |
+          The URL under which Alertmanager is externally reachable
+          (for example, if Alertmanager is served via a reverse proxy).
+          Used for generating relative and absolute links back to Alertmanager itself.
+        type: str
+
+      alertmanager_log_level:
+        description: Only log messages with the given severity or above
+        type: str
+        default: warn
+        choices:
+          - debug
+          - info
+          - warn
+          - error
+
+      alertmanager_log_format:
+        description: Only log messages with the given severity or above
+        type: str
+        default: logfmt
+        choices:
+          - logfmt
+          - json
+
+      alertmanager_port:
+        description: Listen port
+        type: int
+        default: 9093
+
+      alertmanager_manage_user:
+        description: If true, add alertmanager unix user and group
+        type: bool
+        default: true
+
+      alertmanager_user:
+        description: Name of the alertmanager unix user
+        type: str
+        default: alertmanager
+
+      alertmanager_group:
+        description: Name of the alertmanager unix group
+        type: str
+        default: alertmanager
+
+      alertmanager_install:
+        description: If true, install alertmanager
+        type: bool
+        default: true
+
+      alertmanager_bin_dir:
+        description: Directory for the alertmanager binaries
+        type: str
+        default: /opt/prometheus/alertmanager
+
+      alertmanager_src_dir:
+        description: Directory for the downloaded alertmanager src archive
+        type: str
+        default: /opt/prometheus/alertmanager/src
+
+      alertmanager_strip_components:
+        description: Strip NUMBER leading components from file names on extraction
+        type: int
+        default: 1
+
+      alertmanager_src_files:
+        description: List of files to extract from the source archive
+        type: list
+        elements: str
+        default:
+          - alertmanager
+          - amtool
+
+      alertmanager_clean_src_dir:
+        description: Remove old downloaded archive files from alertmanager src directory
+        type: bool
+        default: true
+
+      alertmanager_github_org:
+        description: Name of organisation for alertmanager github repository
+        type: str
+        default: prometheus
+
+      alertmanager_github_repo:
+        description: Name of alertmanager github repository
+        type: str
+        default: alertmanager
+
+      alertmanager_github_checksum_filename:
+        description: Filename for the alertmanager package checksums file on github
+        type: str
+        default: sha256sums.txt
+
+      alertmanager_checksum_type:
+        description: The alertmanager package checksum type
+        type: str
+        default: sha256
+
+      alertmanager_version:
+        description: Version to install (use "latest" for the latest version)
+        type: str
+        default: latest
+
+      alertmanager_arch_map:
+        description: |
+          Mapping of the possible values of ansible_architecture
+          to the alertmanager package architectures
+        type: dict
+
+      alertmanager_flags:
+        description: Contents or list of flags to run alertmanager with
+        type: raw
+
+      alertmanager_extra_flags:
+        description: Extra flags to run alertmanager with
+        type: dict
+
+      alertmanager_config_dir:
+        description: Directory for alertmanager configuration
+        type: str
+        default: /etc/prometheus/alertmanager
+
+      alertmanager_config_file:
+        description: Filename for alertmanager config file
+        type: str
+        default: alertmanager.yml
+
+      alertmanager_config:
+        description: Contents of the alertmanager config file, as string or dict
+        type: raw
+
+      alertmanager_db_dir:
+        description: Directory for alertmanager database
+        type: str
+        default: /var/lib/alertmanager
+
+      alertmanager_storage_retention:
+        description: |
+          How long to keep data for, specify as a number followed by time unit.
+          The units supported are y, w, d, h, m, s, ms.
+        type: str
+
+      alertmanager_template_dir:
+        description: Directory for alertmanager templates
+        type: str
+        default: /etc/prometheus/alertmanager/templates
+
+      alertmanager_template_files:
+        description: List of alertmanager template files to create
+        type: list
+        elements: dict
+        options:
+          name:
+            description: Name of template file
+            type: str
+            required: true
+          config:
+            description: Template file contents
+            type: str
+            required: true
+
+      alertmanager_amtool_config_dir:
+        description: Directory for alertmanager amtool configuration
+        type: str
+        default: /etc/amtool/
+
+      alertmanager_amtool_config_file:
+        description: Filename for alertmanager amtool config file
+        type: str
+        default: config.yml
+
+      alertmanager_amtool_config:
+        description: |
+          Contents of the alertmanager amtool config file, as string or dict
+        type: raw
+        default:
+          alertmanager.url: "http://localhost:9093"

@@ -1,0 +1,65 @@
+---
+- name: "Create configuration directory"
+  ansible.builtin.file:
+    path: "{{ alertmanager_config_dir }}"
+    state: directory
+    owner: root
+    group: "{{ alertmanager_group }}"
+    mode: u=rwx,g=rx,o=rx
+
+- name: "Create database directory"
+  ansible.builtin.file:
+    path: "{{ alertmanager_db_dir }}"
+    state: directory
+    owner: "{{ alertmanager_user }}"
+    group: "{{ alertmanager_group }}"
+    mode: u=rwx,g=rx,o=
+
+- name: "Configure alertmanager"
+  ansible.builtin.template:
+    src: alertmanager.yml
+    dest: "{{ alertmanager_config_dir }}/{{ alertmanager_config_file }}"
+    owner: "root"
+    group: "{{ alertmanager_group }}"
+    mode: u=rw,g=r,o=
+  when: alertmanager_config != ""
+  notify: "reload alertmanager"
+
+- name: "Create template directory"
+  ansible.builtin.file:
+    path: "{{ alertmanager_template_dir }}"
+    state: directory
+    owner: "root"
+    group: "{{ alertmanager_group }}"
+    mode: u=rwx,g=rx,o=rx
+  when: alertmanager_template_files | length >= 1
+
+- name: "Create template files"
+  ansible.builtin.template:
+    src: template.tmpl
+    dest: >-
+      {{ alertmanager_template_dir }}/{{ item.name }}.tmpl
+    owner: "root"
+    group: "{{ alertmanager_group }}"
+    mode: u=rw,g=r,o=r
+  loop: "{{ alertmanager_template_files }}"
+  loop_control:
+    label: "{{ item.name }}"
+  notify: "reload alertmanager"
+
+- name: "Create amtool configuration directory"
+  ansible.builtin.file:
+    path: "{{ alertmanager_amtool_config_dir }}"
+    state: directory
+    owner: root
+    group: "{{ alertmanager_group }}"
+    mode: u=rwx,g=rx,o=rx
+
+- name: "Configure amtool"
+  ansible.builtin.template:
+    src: amtool.yml
+    dest: "{{ alertmanager_amtool_config_dir }}/{{ alertmanager_amtool_config_file }}"
+    owner: "root"
+    group: "{{ alertmanager_group }}"
+    mode: u=rw,g=r,o=r
+  when: alertmanager_amtool_config != ""
