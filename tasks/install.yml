@@ -95,6 +95,16 @@
   loop: "{{ alertmanager_src_files }}"
   notify: "restart alertmanager"
 
+- name: "Create symbolic links to binaries in /usr/local/bin"
+  ansible.builtin.file:
+    src: "{{ alertmanager_bin_dir }}/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  loop:
+    - amtool
+
 - name: Get downloaded archive files
   ansible.builtin.find:
     paths: "{{ alertmanager_src_dir }}"
