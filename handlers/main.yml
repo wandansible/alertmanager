@@ -3,8 +3,11 @@
   ansible.builtin.service:
     name: alertmanager.service
     state: restarted
+  register: _restart_alertmanager
+  notify: reload alertmanager
 
 - name: reload alertmanager
   ansible.builtin.service:
     name: alertmanager.service
     state: reloaded
+  when: _restart_alertmanager is not defined

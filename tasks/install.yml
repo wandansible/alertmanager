@@ -95,6 +95,16 @@
   loop: "{{ alertmanager_src_files }}"
   notify: "restart alertmanager"
 
+- name: "Create symbolic links to binaries in /usr/local/bin"
+  ansible.builtin.file:
+    src: "{{ alertmanager_bin_dir }}/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    owner: root
+    group: root
+    state: link
+  loop:
+    - amtool
+
 - name: Get downloaded archive files
   ansible.builtin.find:
     paths: "{{ alertmanager_src_dir }}"
@@ -111,19 +121,3 @@
   when:
     - "item['path'] | basename != _alertmanager_archive_filename"
     - "alertmanager_clean_src_dir"
-
-- name: "Add systemd service"
-  ansible.builtin.template:
-    src: systemd.service
-    dest: /etc/systemd/system/alertmanager.service
-    owner: root
-    group: root
-    mode: u=rw,g=r,o=r
-  notify: "restart alertmanager"
-
-- name: "Start and enable systemd service"
-  ansible.builtin.systemd:
-    name: "alertmanager.service"
-    daemon_reload: true
-    enabled: true
-    state: started

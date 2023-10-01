@@ -63,3 +63,10 @@
     group: "{{ alertmanager_group }}"
     mode: u=rw,g=r,o=r
   when: alertmanager_amtool_config != ""
+
+- name: "Validate alertmanager configuration file"
+  ansible.builtin.command:
+    cmd: >-
+      amtool check-config "{{ alertmanager_config_dir }}/{{ alertmanager_config_file }}"
+  register: _amtool_check_config
+  changed_when: _amtool_check_config.rc != 0

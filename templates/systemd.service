@@ -45,6 +45,7 @@ ProtectHome=true
 ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectSystem=full
+ReadWritePaths={{ alertmanager_db_dir }}
 RemoveIPC=true
 RestrictNamespaces=true
 RestrictRealtime=true

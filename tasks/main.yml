@@ -7,3 +7,7 @@
 - name: "Configure alertmanager"
   ansible.builtin.include_tasks:
     file: configure.yml
+
+- name: "Enable alertmanager"
+  ansible.builtin.include_tasks:
+    file: service.yml
