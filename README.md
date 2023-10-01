@@ -50,6 +50,12 @@ OPTIONS (= is mandatory):
         default: true
         type: bool
 
+- alertmanager_cli_tools
+        List of CLI tool binaries that should have symlinks created in
+        /usr/local/bin/
+        default: [amtool]
+        type: list
+
 - alertmanager_config
         Contents of the alertmanager config file, as string or dict
         default: null
