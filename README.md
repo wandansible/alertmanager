@@ -125,7 +125,7 @@ OPTIONS (= is mandatory):
         type: str
 
 - alertmanager_log_format
-        Only log messages with the given severity or above
+        Output format of log messages
         choices: [logfmt, json]
         default: logfmt
         type: str
