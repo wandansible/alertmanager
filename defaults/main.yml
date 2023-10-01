@@ -21,6 +21,8 @@ alertmanager_src_files:
   - alertmanager
   - amtool
 alertmanager_clean_src_dir: true
+alertmanager_cli_tools:
+  - amtool
 
 alertmanager_manage_user: true
 alertmanager_user: alertmanager

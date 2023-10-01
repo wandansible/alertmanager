@@ -86,6 +86,12 @@ argument_specs:
         type: bool
         default: true
 
+      alertmanager_cli_tools:
+        description: List of CLI tool binaries that should have symlinks created in /usr/local/bin/
+        type: list
+        default:
+          - amtool
+
       alertmanager_github_org:
         description: Name of organisation for alertmanager github repository
         type: str
