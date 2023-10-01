@@ -11,3 +11,4 @@
 - name: "Enable alertmanager"
   ansible.builtin.include_tasks:
     file: service.yml
+  when: alertmanager_install | bool
