@@ -1,9 +1,14 @@
-#jinja2: trim_blocks: "false", lstrip_blocks: "true"
 # {{ ansible_managed }}
 
 [Unit]
 Description=Alertmanager for prometheus
 Documentation=https://prometheus.io/docs/alerting/alertmanager/
+
+ConditionFileIsExecutable={{ alertmanager_bin_dir }}/alertmanager
+
+StartLimitIntervalSec=0
+
+Wants=network-online.target
 After=network-online.target
 Requires=local-fs.target
 After=local-fs.target
@@ -12,28 +17,21 @@ After=local-fs.target
 Type=simple
 User={{ alertmanager_user }}
 Group={{ alertmanager_group }}
+EnvironmentFile=-/etc/default/alertmanager
+ExecStart={{ alertmanager_bin_dir }}/alertmanager \
+          $ALERTMANAGER_ARGS
 ExecReload=/bin/kill -HUP ${MAINPID}
-ExecStart={{ alertmanager_bin_dir }}/alertmanager{% if alertmanager_flags | length > 0 %} \
-    {% if alertmanager_flags is string %}
-    {{ alertmanager_flags | trim | indent(4) }}
-    {% else %}
-    {{ alertmanager_flags | join(' \\\n') | indent(4) }}
-    {% endif %}
-{% endif %}
 
 Restart=on-failure
 RestartSec=10s
 TimeoutStopSec=20s
 SendSIGKILL=no
 
-SyslogIdentifier=alertmanager
-
 AmbientCapabilities=
 CapabilityBoundingSet=
 DeviceAllow=/dev/null rw
 DevicePolicy=strict
 LimitMEMLOCK=0
-LimitNOFILE=32768
 LockPersonality=true
 MemoryDenyWriteExecute=true
 NoNewPrivileges=true

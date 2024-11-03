@@ -1,0 +1,9 @@
+#jinja2: trim_blocks: "false", lstrip_blocks: "true"
+# {{ ansible_managed }}
+
+ALERTMANAGER_ARGS='
+{% if alertmanager_flags is string %}
+{{ alertmanager_flags | trim }}
+{% else %}
+{{ alertmanager_flags | join("\n") }}
+{% endif %}'
