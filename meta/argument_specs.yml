@@ -124,7 +124,7 @@ argument_specs:
         type: dict
 
       alertmanager_flags:
-        description: Contents or list of flags to run alertmanager with
+        description: List of flags to run alertmanager with, as string or list
         type: raw
 
       alertmanager_extra_flags:
