@@ -40,8 +40,8 @@
     body_format: json
   register: _release_info
 
-- name: "Get archive URL from GitHub release"
-  ansible.builtin.set_fact:
+- name: Download release archive
+  vars:
     _alertmanager_archive_url: >-
       {{ _release_info.json.assets
          | selectattr("name", "search", "alertmanager", ignorecase=true)
@@ -50,50 +50,58 @@
          | map(attribute='browser_download_url')
          | first
          | default(None) }}
-
-- name: "Get checksum URL from GitHub release"
-  ansible.builtin.set_fact:
+    _alertmanager_archive_filename: "{{ _alertmanager_archive_url | split('/') | last }}"
     _alertmanager_checksum_url: >-
       {{ _release_info.json.assets
          | selectattr("name", "equalto", alertmanager_github_checksum_filename)
          | map(attribute='browser_download_url')
          | first
          | default(None) }}
-
-- name: "Set archive filename"
-  ansible.builtin.set_fact:
-    _alertmanager_archive_filename: "{{ _alertmanager_archive_url | split('/') | last }}"
-
-- name: "Get archive checksum from URL"
-  ansible.builtin.set_fact:
     _alertmanager_archive_checksum: >-
       {{ lookup('url', _alertmanager_checksum_url, wantlist=True)
          | select('search', _alertmanager_archive_filename)
          | first | default('') | split(' ') | first | default(None) }}
+  block:
+    - name: "Download archive"
+      ansible.builtin.get_url:
+        url: "{{ _alertmanager_archive_url }}"
+        dest: "{{ alertmanager_src_dir }}/{{ _alertmanager_archive_filename }}"
+        checksum: "{{ alertmanager_checksum_type }}:{{ _alertmanager_archive_checksum }}"
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
 
-- name: "Download archive"
-  ansible.builtin.get_url:
-    url: "{{ _alertmanager_archive_url }}"
-    dest: "{{ alertmanager_src_dir }}/{{ _alertmanager_archive_filename }}"
-    checksum: "{{ alertmanager_checksum_type }}:{{ _alertmanager_archive_checksum }}"
-    owner: root
-    group: root
-    mode: u=rw,g=r,o=r
+    - name: "Extract files from archive"
+      ansible.builtin.unarchive:
+        src: "{{ alertmanager_src_dir }}/{{ _alertmanager_archive_filename }}"
+        remote_src: true
+        dest: "{{ alertmanager_bin_dir }}"
+        extra_opts:
+          - "--strip-components={{ alertmanager_strip_components }}"
+          - "--wildcards"
+          - "--no-anchored"
+          - "{{ item }}"
+        owner: root
+        group: root
+      loop: "{{ alertmanager_src_files }}"
+      notify: "restart alertmanager"
 
-- name: "Extract files from archive"
-  ansible.builtin.unarchive:
-    src: "{{ alertmanager_src_dir }}/{{ _alertmanager_archive_filename }}"
-    remote_src: true
-    dest: "{{ alertmanager_bin_dir }}"
-    extra_opts:
-      - "--strip-components={{ alertmanager_strip_components }}"
-      - "--wildcards"
-      - "--no-anchored"
-      - "{{ item }}"
-    owner: root
-    group: root
-  loop: "{{ alertmanager_src_files }}"
-  notify: "restart alertmanager"
+    - name: Get downloaded archive files
+      ansible.builtin.find:
+        paths: "{{ alertmanager_src_dir }}"
+        patterns: "{{ '*' + _alertmanager_archive_filename | splitext | last }}"
+      register: _alertmanager_src_archives
+
+    - name: Remove older downloaded archive files
+      ansible.builtin.file:
+        path: "{{ item['path'] }}"
+        state: absent
+      loop: "{{ _alertmanager_src_archives['files'] }}"
+      loop_control:
+        label: "{{ item['path'] }}"
+      when:
+        - "item['path'] | basename != _alertmanager_archive_filename"
+        - "alertmanager_clean_src_dir"
 
 - name: "Create symbolic links for CLI tool binaries in /usr/local/bin"
   ansible.builtin.file:
@@ -103,20 +111,3 @@
     group: root
     state: link
   loop: "{{ alertmanager_cli_tools }}"
-
-- name: Get downloaded archive files
-  ansible.builtin.find:
-    paths: "{{ alertmanager_src_dir }}"
-    patterns: "{{ '*' + _alertmanager_archive_filename | splitext | last }}"
-  register: _alertmanager_src_archives
-
-- name: Remove older downloaded archive files
-  ansible.builtin.file:
-    path: "{{ item['path'] }}"
-    state: absent
-  loop: "{{ _alertmanager_src_archives['files'] }}"
-  loop_control:
-    label: "{{ item['path'] }}"
-  when:
-    - "item['path'] | basename != _alertmanager_archive_filename"
-    - "alertmanager_clean_src_dir"
