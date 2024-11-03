@@ -3,7 +3,7 @@
   {% if v == "" %}
 --{{ k }}
   {% else %}
---{{ k }}="{{ v | quote }}"
+--{{ k }}="{{ v }}"
   {% endif %}
 {% endfor %}
 --log.level="{{ alertmanager_log_level }}"
