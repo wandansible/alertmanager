@@ -29,21 +29,33 @@
     - "{{ alertmanager_src_dir }}"
 
 - name: "Get GitHub release information"
-  ansible.builtin.uri:
-    url: >-
-      {{ "https://api.github.com/repos/" + alertmanager_github_org + "/" + alertmanager_github_repo
-         + "/releases"
-         + ("/tags" if alertmanager_version != "latest" else "") + "/" + alertmanager_version }}
-    method: GET
-    return_content: true
-    status_code: 200
-    body_format: json
-  register: _release_info
+  run_once: true
+  delegate_to: localhost
+  delegate_facts: true
+  when:
+    - "'github_alertmanager_release_info' not in hostvars['localhost']['ansible_facts']"
+  block:
+    - name: "Get GitHub release information"
+      ansible.builtin.uri:
+        url: >-
+          {{ "https://api.github.com/repos/" + alertmanager_github_org + "/" + alertmanager_github_repo
+             + "/releases"
+             + ("/tags" if alertmanager_version != "latest" else "") + "/" + alertmanager_version }}
+        method: GET
+        return_content: true
+        status_code: 200
+        body_format: json
+      register: _release_info
+
+    - name: Cache GitHub release information
+      ansible.builtin.set_fact:
+        github_alertmanager_release_info: "{{ _release_info.json }}"
+        cacheable: true
 
 - name: Download release archive
   vars:
     _alertmanager_archive_url: >-
-      {{ _release_info.json.assets
+      {{ hostvars["localhost"]["ansible_facts"]["github_alertmanager_release_info"].assets
          | selectattr("name", "search", "alertmanager", ignorecase=true)
          | selectattr("name", "search", "linux", ignorecase=true)
          | selectattr("name", "search", alertmanager_arch_map[ansible_architecture], ignorecase=true)
@@ -52,7 +64,7 @@
          | default(None) }}
     _alertmanager_archive_filename: "{{ _alertmanager_archive_url | split('/') | last }}"
     _alertmanager_checksum_url: >-
-      {{ _release_info.json.assets
+      {{ hostvars["localhost"]["ansible_facts"]["github_alertmanager_release_info"].assets
          | selectattr("name", "equalto", alertmanager_github_checksum_filename)
          | map(attribute='browser_download_url')
          | first
