@@ -11,21 +11,25 @@ ENTRY POINT: *main* - Install and configure alertmanager for prometheus
 
 Options (= indicates it is required):
 
-- alertmanager_amtool_config  Contents of the alertmanager amtool config file, as string or dict
+- alertmanager_amtool_config  Contents of the alertmanager amtool
+                               config file, as string or dict
           default:
             alertmanager.url: http://localhost:9093
           type: raw
 
-- alertmanager_amtool_config_dir  Directory for alertmanager amtool configuration
+- alertmanager_amtool_config_dir  Directory for alertmanager amtool
+                                   configuration
           default: /etc/amtool/
           type: str
 
-- alertmanager_amtool_config_file  Filename for alertmanager amtool config file
+- alertmanager_amtool_config_file  Filename for alertmanager amtool
+                                    config file
           default: config.yml
           type: str
 
-- alertmanager_arch_map  Mapping of the possible values of ansible_architecture to the
-                          alertmanager package architectures
+- alertmanager_arch_map  Mapping of the possible values of
+                          ansible_architecture to the alertmanager
+                          package architectures
           default: null
           type: dict
 
@@ -37,16 +41,18 @@ Options (= indicates it is required):
           default: sha256
           type: str
 
-- alertmanager_clean_src_dir  Remove old downloaded archive files from alertmanager src directory
+- alertmanager_clean_src_dir  Remove old downloaded archive files
+                               from alertmanager src directory
           default: true
           type: bool
 
-- alertmanager_cli_tools  List of CLI tool binaries that should have symlinks created in
-                           /usr/local/bin/
+- alertmanager_cli_tools  List of CLI tool binaries that should have
+                           symlinks created in /usr/local/bin/
           default: [amtool]
           type: list
 
-- alertmanager_config  Contents of the alertmanager config file, as string or dict
+- alertmanager_config  Contents of the alertmanager config file, as
+                        string or dict
           default: null
           type: raw
 
@@ -62,11 +68,12 @@ Options (= indicates it is required):
           default: /var/lib/alertmanager
           type: str
 
-- alertmanager_external_url  The URL under which Alertmanager is externally reachable (for
-                              example, if Alertmanager is served via a
-                              reverse proxy). Used for generating
-                              relative and absolute links back to
-                              Alertmanager itself.
+- alertmanager_external_url  The URL under which Alertmanager is
+                              externally reachable (for example, if
+                              Alertmanager is served via a reverse
+                              proxy). Used for generating relative and
+                              absolute links back to Alertmanager
+                              itself.
           default: null
           type: str
 
@@ -74,15 +81,19 @@ Options (= indicates it is required):
           default: null
           type: dict
 
-- alertmanager_flags  List of flags to run alertmanager with, as string or list
+- alertmanager_flags  List of flags to run alertmanager with, as
+                       string or list
           default: null
           type: raw
 
-- alertmanager_github_checksum_filename  Filename for the alertmanager package checksums file on github
+- alertmanager_github_checksum_filename  Filename for the
+                                          alertmanager package
+                                          checksums file on github
           default: sha256sums.txt
           type: str
 
-- alertmanager_github_org  Name of organisation for alertmanager github repository
+- alertmanager_github_org  Name of organisation for alertmanager
+                            github repository
           default: prometheus
           type: str
 
@@ -107,12 +118,14 @@ Options (= indicates it is required):
           default: logfmt
           type: str
 
-- alertmanager_log_level  Only log messages with the given severity or above
+- alertmanager_log_level  Only log messages with the given severity
+                           or above
           choices: [debug, info, warn, error]
           default: warn
           type: str
 
-- alertmanager_manage_user  If true, add alertmanager unix user and group
+- alertmanager_manage_user  If true, add alertmanager unix user and
+                             group
           default: true
           type: bool
 
@@ -120,22 +133,26 @@ Options (= indicates it is required):
           default: 9093
           type: int
 
-- alertmanager_src_dir  Directory for the downloaded alertmanager src archive
+- alertmanager_src_dir  Directory for the downloaded alertmanager src
+                         archive
           default: /opt/prometheus/alertmanager/src
           type: str
 
-- alertmanager_src_files  List of files to extract from the source archive
+- alertmanager_src_files  List of files to extract from the source
+                           archive
           default: [alertmanager, amtool]
           elements: str
           type: list
 
-- alertmanager_storage_retention  How long to keep data for, specify as a number followed by time
-                                   unit. The units supported are y, w,
-                                   d, h, m, s, ms.
+- alertmanager_storage_retention  How long to keep data for, specify
+                                   as a number followed by time unit.
+                                   The units supported are y, w, d, h,
+                                   m, s, ms.
           default: null
           type: str
 
-- alertmanager_strip_components  Strip NUMBER leading components from file names on extraction
+- alertmanager_strip_components  Strip NUMBER leading components from
+                                  file names on extraction
           default: 1
           type: int
 
@@ -143,23 +160,25 @@ Options (= indicates it is required):
           default: /etc/prometheus/alertmanager/templates
           type: str
 
-- alertmanager_template_files  List of alertmanager template files to create
+- alertmanager_template_files  List of alertmanager template files to
+                                create
           default: null
           elements: dict
           type: list
           options:
 
-          = config            Template file contents
+          = config  Template file contents
             type: str
 
-          = name            Name of template file
+          = name  Name of template file
             type: str
 
 - alertmanager_user  Name of the alertmanager unix user
           default: alertmanager
           type: str
 
-- alertmanager_version  Version to install (use "latest" for the latest version)
+- alertmanager_version  Version to install (use "latest" for the
+                         latest version)
           default: latest
           type: str
 ```
