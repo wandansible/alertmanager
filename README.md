@@ -101,6 +101,11 @@ Options (= indicates it is required):
           default: alertmanager
           type: str
 
+- alertmanager_github_token  Optional bearer token to use to
+                              authenticate with api.github.com
+          default: ''
+          type: str
+
 - alertmanager_group  Name of the alertmanager unix group
           default: alertmanager
           type: str

@@ -8,6 +8,7 @@ alertmanager_arch_map:
 
 alertmanager_github_org: prometheus
 alertmanager_github_repo: alertmanager
+alertmanager_github_token: ""
 alertmanager_github_checksum_filename: sha256sums.txt
 alertmanager_checksum_type: sha256
 
