@@ -6,6 +6,8 @@
       ansible.builtin.include_role:
         name: "wandansible.alertmanager"
       vars:
+        alertmanager_github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+
         alertmanager_config:
           route:
             receiver: dummy

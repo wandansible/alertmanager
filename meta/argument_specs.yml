@@ -102,6 +102,11 @@ argument_specs:
         type: str
         default: alertmanager
 
+      alertmanager_github_token:
+        description: Optional bearer token to use to authenticate with api.github.com
+        type: str
+        default: ""
+
       alertmanager_github_checksum_filename:
         description: Filename for the alertmanager package checksums file on github
         type: str
