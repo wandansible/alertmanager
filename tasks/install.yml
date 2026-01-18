@@ -4,7 +4,7 @@
     name: "{{ alertmanager_group }}"
     system: true
     state: present
-  when: alertmanager_manage_user
+  when: alertmanager_manage_user | bool
 
 - name: "Add system user"
   ansible.builtin.user:
@@ -15,7 +15,7 @@
     home: "{{ alertmanager_bin_dir }}"
     createhome: false
     state: present
-  when: alertmanager_manage_user
+  when: alertmanager_manage_user | bool
 
 - name: "Create directories"
   ansible.builtin.file:
@@ -122,7 +122,7 @@
         label: "{{ item['path'] }}"
       when:
         - "item['path'] | basename != _alertmanager_archive_filename"
-        - "alertmanager_clean_src_dir"
+        - "alertmanager_clean_src_dir | bool"
 
 - name: "Create symbolic links for CLI tool binaries in /usr/local/bin"
   ansible.builtin.file:
