@@ -28,8 +28,8 @@ Options (= indicates it is required):
           type: str
 
 - alertmanager_arch_map  Mapping of the possible values of
-                          ansible_architecture to the alertmanager
-                          package architectures
+                          ansible_facts.architecture to the
+                          alertmanager package architectures
           default: null
           type: dict
 
