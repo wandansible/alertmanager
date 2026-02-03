@@ -116,13 +116,13 @@
 
     - name: Remove older downloaded archive files
       ansible.builtin.file:
-        path: "{{ item['path'] }}"
+        path: "{{ item.path }}"
         state: absent
-      loop: "{{ _alertmanager_src_archives['files'] }}"
+      loop: "{{ _alertmanager_src_archives.files }}"
       loop_control:
-        label: "{{ item['path'] }}"
+        label: "{{ item.path }}"
       when:
-        - "item['path'] | basename != _alertmanager_archive_filename"
+        - "item.path | basename != _alertmanager_archive_filename"
         - "alertmanager_clean_src_dir | bool"
 
 - name: "Create symbolic links for CLI tool binaries in /usr/local/bin"
