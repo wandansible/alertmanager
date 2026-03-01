@@ -33,6 +33,11 @@ Options (= indicates it is required):
           default: null
           type: dict
 
+- alertmanager_archive_extension  File extension for the alertmanager
+                                   package archive
+          default: tar.gz
+          type: str
+
 - alertmanager_bin_dir  Directory for the alertmanager binaries
           default: /opt/prometheus/alertmanager
           type: str
