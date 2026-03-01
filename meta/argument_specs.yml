@@ -107,6 +107,11 @@ argument_specs:
         type: str
         default: ""
 
+      alertmanager_archive_extension:
+        description: File extension for the alertmanager package archive
+        type: str
+        default: tar.gz
+
       alertmanager_github_checksum_filename:
         description: Filename for the alertmanager package checksums file on github
         type: str
