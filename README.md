@@ -42,6 +42,11 @@ Options (= indicates it is required):
           default: /opt/prometheus/alertmanager
           type: str
 
+- alertmanager_checksum_filename  Filename for the alertmanager
+                                   package checksums file on github
+          default: sha256sums.txt
+          type: str
+
 - alertmanager_checksum_type  The alertmanager package checksum type
           default: sha256
           type: str
@@ -90,12 +95,6 @@ Options (= indicates it is required):
                        string or list
           default: null
           type: raw
-
-- alertmanager_github_checksum_filename  Filename for the
-                                          alertmanager package
-                                          checksums file on github
-          default: sha256sums.txt
-          type: str
 
 - alertmanager_github_org  Name of organisation for alertmanager
                             github repository
