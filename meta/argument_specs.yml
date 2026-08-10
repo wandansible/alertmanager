@@ -112,7 +112,7 @@ argument_specs:
         type: str
         default: tar.gz
 
-      alertmanager_github_checksum_filename:
+      alertmanager_checksum_filename:
         description: Filename for the alertmanager package checksums file on github
         type: str
         default: sha256sums.txt
